@@ -1,10 +1,12 @@
+
+const apiUrl = 'http://localhost:5000'
+
 export interface GameInfo {
     board: string[],
     player_holes: string[][]
 }
 
 const doRequest = (url: string, callback: Function) => {
-
     const req = new XMLHttpRequest();
     
     req.addEventListener('load', () => {
@@ -13,27 +15,29 @@ const doRequest = (url: string, callback: Function) => {
 
     req.open('GET', url);
     req.send();
-
 };
 
-export const getActor = (hist: string, callback: Function) => {
-    doRequest(`http://localhost:5000/get-actor?hist=${hist}`, callback);
+export const getActor = (hist: string[], callback: Function) => {
+    doRequest(`${apiUrl}/get-actor?hist=${hist.join('_')}`, callback);
 };
 
-export const getNature = (hist: string, callback: Function) => {
-    doRequest(`http://localhost:5000/get-nature-action?hist=${hist}`, callback);
+export const getNature = (hist: string[], callback: Function) => {
+    doRequest(`${apiUrl}/get-nature-action?hist=${hist.join('_')}`, callback);
 };
 
-export const getAvailableActions = (hist: string, callback: Function) => {
-    doRequest(`http://localhost:5000/get-available-actions?hist=${hist}`, callback);
+export const getAvailableActions = (hist: string[], callback: Function) => {
+    doRequest(`${apiUrl}/get-available-actions?hist=${hist.join('_')}`, callback);
 };
 
-export const getAIMove = (hist: string, ai_player_no: number, callback: Function) => {
+export const getAIMove = (hist: string[], ai_player_no: number, callback: Function) => {
     const ai_player = ai_player_no === 0 ? 'p1' : 'p2';
-    doRequest(`http://localhost:5000/get-beta-action?hist=${hist}&agent_player=${ai_player}`, callback);
+    doRequest(`${apiUrl}/get-beta-action?hist=${hist.join('_')}&agent_player=${ai_player}`, callback);
 };
 
+export const isTerminal = (hist: string[], callback: Function) => {
+    doRequest(`${apiUrl}/is-terminal?hist=${hist.join('_')}`, callback);
+}
 
-export const isTerminal = (hist: string, callback: Function) => {
-    doRequest(`http://localhost:5000/is-terminal?hist=${hist}`, callback);
+export const getBets = (hist: string[], callback: Function) => {
+    doRequest(`${apiUrl}/get-bets?hist=${hist.join('_')}`, callback);
 }
