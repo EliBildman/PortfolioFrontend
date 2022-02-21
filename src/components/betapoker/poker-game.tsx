@@ -20,9 +20,10 @@ const PokerGame: FC = () => {
 
     const [bets, setBets] = useState<number[]>([0, 0]);
     const [takes, setTakes] = useState<number[]>([0, 0]);
+    const [statusMessage, setStatusMessage] = useState<string>('');
 
     const takeUserInput = (move: string) => {
-        console.log('user declares ' + move);
+        setStatusMessage(`Player declares ${move}`);
         setTakingUserInput(false);
         const actCode = {'fold': 'F', 'call': 'C', 'raise': 'R'}[move];
         const userNum = 1 - aiPlayerNo;
@@ -30,7 +31,7 @@ const PokerGame: FC = () => {
     };
 
     const takeAIInput = (move: string) => {
-        console.log('ai declares ' + move);
+        setStatusMessage(`AI declares ${move}`);
         const actCode = {'fold': 'F', 'call': 'C', 'raise': 'R'}[move];
         setHistory([...history, `P${aiPlayerNo}-${actCode}`]);
     };
@@ -49,14 +50,20 @@ const PokerGame: FC = () => {
     }
 
     useEffect(() => {
-        console.log(history)
         if (gameActive) {
             isTerminal(history, (termInfo: [boolean, number[]]) => {
                 if(termInfo[0]) {
                     const takes = aiPlayerNo === 1 ? termInfo[1] : termInfo[1].reverse()
                     setTakes(takes);
                     setGameActive(false);
-                    console.log('game over, takes: ' + termInfo[1]);
+                    if (takes[0] > takes[1]) {
+                        setStatusMessage('Player wins');
+                    } else if (takes[1] > takes[0]) {
+                        setStatusMessage('AI wins');
+                    } else {
+                        setStatusMessage('Tie');
+                    }
+                    // console.log('game over, takes: ' + termInfo[1]);
                 } else {
                     getActor(history, (actor: string) => {
                         if (actor === 'nature') {
@@ -74,10 +81,12 @@ const PokerGame: FC = () => {
                                         setPlayerCards(cards.player_holes[0]);
                                         setAiCards(cards.player_holes[1]);
                                     }
+                                    setStatusMessage('Deal holes');
                                 } else {
                                     const board: string = cards.board.filter(c => !(commCards.includes(c))).join('');
                                     setHistory([...history, `N-DB-${board}`]);
                                     setCommCards(cards.board);
+                                    setStatusMessage('Deal board');
                                 }
                             });
                         } else if (actor === 'p1' || actor === 'p2') {
@@ -103,7 +112,8 @@ const PokerGame: FC = () => {
             width: '100%',
             height: '400px',
             border: 'black solid 1px',
-            backgroundColor: '#303030'
+            backgroundColor: '#303030',
+            marginBottom: 4,
         }}>
             <GameDisplay
                 playerCards={playerCards}
@@ -111,12 +121,12 @@ const PokerGame: FC = () => {
                 commCards={commCards}
                 takingUserInput={takingUserInput} 
                 legalUserActions={legalUserActions}
-                aiPlayerNo={aiPlayerNo}
                 gameActive={gameActive}
                 userInputCallback={takeUserInput}
                 startCallback={resetGame}
                 bets={bets}
                 takes={takes}
+                statusMessage={statusMessage}
             />
         </Box>
     )

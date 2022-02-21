@@ -16,15 +16,15 @@ const ProjectsList: FC = (props) => {
             <Grid item width='100%'>
                 <Grid container direction='column' spacing={2}>
                     <ProjectItem
-                        image_url='/images/poker.jpg'
+                        image_url='/images/betapokerlogo.png'
                         href='/projects/betapoker'
                         name='BetaPoker'
-                        technologies={['Python', 'PokerFace']}
+                        technologies={['CFR', 'Python']}
                         description= {`As my senior portfolio, I created a 2-player poker 
                         agent using CFR and some custom abstrctions. This demo is to test performance aginst humans.`}
                     />
                     <ProjectItem
-                        image_url='/images/hal900.jpg'
+                        image_url='/images/thecontroller.jpg'
                         href='/projects/controlserver'
                         name='ControlServer'
                         technologies={['Node.js']}

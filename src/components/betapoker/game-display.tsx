@@ -4,6 +4,7 @@ import CardSpread from './card-spread';
 import Card from './card';
 import RoboAvatar from './robo-avatar';
 import ActionButton from './action-button';
+import PlayerAvatar from './player-avatar';
 
 interface GameDisplayProps {
     playerCards: string[],
@@ -11,10 +12,10 @@ interface GameDisplayProps {
     commCards: string[],
     takingUserInput: boolean,
     legalUserActions: string[],
-    aiPlayerNo: number,
     gameActive: boolean,
     userInputCallback: Function,
     startCallback: Function,
+    statusMessage: string,
     bets: number[],
     takes: number[],
 }
@@ -50,8 +51,10 @@ const GameDisplay: FC<GameDisplayProps> = (props) => {
     return (
         <Grid container direction='row' width='100%' height='100%'>
             <Grid item xs={6} container direction='column' >
-                <Grid item xs={8} />
-                <Grid item xs={8}>
+                <Grid item xs={8} container justifyContent="center" alignItems="center" >
+                    <PlayerAvatar />
+                </Grid>
+                <Grid item xs={7}>
                     <CardSpread ids={props.playerCards} />
                 </Grid>
                 <Grid item container justifyContent='center' color='white' xs={8} >
@@ -59,13 +62,18 @@ const GameDisplay: FC<GameDisplayProps> = (props) => {
                 </Grid>
             </Grid>
             <Grid item xs={12} container direction='column' >
-                <Grid item xs={8}>
+                <Grid item xs={7}>
                     <CardSpread ids={props.commCards} />
                 </Grid>
-                <Grid item xs={8} container justifyContent="center" alignItems="center">
+                <Grid item xs={7} container justifyContent="center" alignItems="center">
                     {center}
                 </Grid>
-                <Grid item xs={8} container justifyContent='space-between' alignItems='center'>
+                <Grid item xs={3} container justifyContent="center" alignItems="center">
+                    <Typography color='white'>
+                        {props.statusMessage}
+                    </Typography>
+                </Grid>
+                <Grid item xs={7} container justifyContent='space-between' alignItems='center'>
                     {buttons}
                 </Grid>
             </Grid>
@@ -73,7 +81,7 @@ const GameDisplay: FC<GameDisplayProps> = (props) => {
                 <Grid item xs={8} container justifyContent="center" alignItems="center">
                     <RoboAvatar />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={7}>
                     <CardSpread flipped={props.gameActive} ids={props.aiCards} />
                 </Grid>
                 <Grid item container justifyContent='center' color='white' xs={8}>

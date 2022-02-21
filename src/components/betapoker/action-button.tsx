@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Button } from 'react-nes-component';
 
 interface ActionButtonProps {
@@ -22,7 +22,11 @@ const ActionButton: FC<ActionButtonProps> = (props) => {
             md: 70,
             lg: 100
         }}>
-            <Button style={sty} onClick={props.disabled? null : props.action}>{props.children}</Button>
+            <Button style={sty} onClick={props.disabled? null : props.action}>
+                <Typography>
+                    {props.children}
+                </Typography>
+            </Button>
         </Box>
     )
 };

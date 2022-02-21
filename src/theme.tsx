@@ -12,6 +12,7 @@ export const theme : Theme = createTheme({
         fontFamily: 'Andale Mono',
         subtitle1: {
             color: 'DimGray'
-        }
+        },
+        
     }
 })
