@@ -4,16 +4,16 @@ import { CodeBlock, dracula } from 'react-code-blocks';
 
 const BetaPokerWriteup: FC = () => {
 
-    const cf_value_code_no_sub = "\
+    const cf_value_code = "\
 def cf_value(node, sub_action=None):\n\
-    #recursively get EV of node to every possible term, adjusted for transition probs\n\
-        return prob_history(node) * expected_value(node)\n\n\
+    if sub_action is None:\n\
+        return prob_history(node) * expected_value(node)\n\
     for child in node.get_children():\n\
         if child.last_action == sub_action:\n\
             # *1 here is symbolic to represent this is the subbed strat where this action is always taken\n\
             return prob_history(node) * 1.0 * expected_value(child)"
 
-    const cf_value_code = "\
+    const cf_value_code_no_sub = "\
 def cf_value(node):\n\
     #recursively get EV of node to every possible term, adjusted for transition probs\n\
     return prob_history(node) * expected_value(node)"

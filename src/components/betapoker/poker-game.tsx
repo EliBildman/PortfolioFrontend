@@ -82,8 +82,8 @@ const PokerGame: FC = () => {
                     getActor(history, (actor: string) => {
                         if (actor === 'nature') {
                             getNature(history, (cards: GameInfo) => {
-                                console.log('nature deals');
-                                console.log(cards);
+                                // console.log('nature deals');
+                                // console.log(cards);
                                 if (history.length === 0) {
                                     const p1_hole = cards.player_holes[0].join('')
                                     const p2_hole = cards.player_holes[1].join('')
