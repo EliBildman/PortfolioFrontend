@@ -1,7 +1,8 @@
 import { FC, useState, useEffect } from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
+import axios from 'axios'
 import GameDisplay from './game-display';
-import { getActor, getNature, getAvailableActions, getAIMove, isTerminal, getBets, GameInfo } from './game-api';
+import { getActor, getNature, getAvailableActions, getAIMove, isTerminal, getBets, GameInfo, sendResults } from './game-api';
 
 const PokerGame: FC = () => {
 
@@ -21,6 +22,8 @@ const PokerGame: FC = () => {
     const [bets, setBets] = useState<number[]>([0, 0]);
     const [takes, setTakes] = useState<number[]>([0, 0]);
     const [statusMessage, setStatusMessage] = useState<string>('');
+
+    const [userIp, setUserIp] = useState<string>('');
 
     const takeUserInput = (move: string) => {
         setStatusMessage(`Player declares ${move}`);
@@ -49,10 +52,19 @@ const PokerGame: FC = () => {
         setTakes([0, 0]);
     }
 
+    //get user ip
+    useEffect(() => {
+        axios.get('https://geolocation-db.com/json/').then((res) => {
+            setUserIp(res.data.IPv4);
+        })
+    }, []);
+
+    //do game logic
     useEffect(() => {
         if (gameActive) {
             isTerminal(history, (termInfo: [boolean, number[]]) => {
                 if(termInfo[0]) {
+
                     const takes = aiPlayerNo === 1 ? termInfo[1] : termInfo[1].reverse()
                     setTakes(takes);
                     setGameActive(false);
@@ -63,8 +75,10 @@ const PokerGame: FC = () => {
                     } else {
                         setStatusMessage('Tie');
                     }
-                    // console.log('game over, takes: ' + termInfo[1]);
+                    sendResults(takes[1] - takes[0], userIp);
+
                 } else {
+
                     getActor(history, (actor: string) => {
                         if (actor === 'nature') {
                             getNature(history, (cards: GameInfo) => {
@@ -89,19 +103,24 @@ const PokerGame: FC = () => {
                                     setStatusMessage('Deal board');
                                 }
                             });
+
                         } else if (actor === 'p1' || actor === 'p2') {
+
                             if (aiPlayerNo === ['p1', 'p2'].indexOf(actor)) { //kinda a sexy hack man
                                 getAIMove(history, aiPlayerNo, takeAIInput);
                             } else {
                                 setTakingUserInput(true);
                                 getAvailableActions(history, setLegalUserActions);
                             }
+
                         }
                     });
+
                     getBets(history, (bets: number[]) => {
                         bets = aiPlayerNo === 1 ? bets : bets.reverse();
                         setBets(bets);
-                    })
+                    });
+
                 }
             })
         }

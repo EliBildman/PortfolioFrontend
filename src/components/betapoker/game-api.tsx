@@ -1,5 +1,6 @@
 
-const apiUrl = 'http://localhost:5000'
+const apiUrl = 'http://localhost:5000';
+const backendUrl = 'http://localhost:3005';
 
 export interface GameInfo {
     board: string[],
@@ -40,4 +41,17 @@ export const isTerminal = (hist: string[], callback: Function) => {
 
 export const getBets = (hist: string[], callback: Function) => {
     doRequest(`${apiUrl}/get-bets?hist=${hist.join('_')}`, callback);
+}
+
+export const sendResults = (stack_diff: number, player_ip: string) => {
+    fetch(`${backendUrl}/api/beta`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            player_ip,
+            stack_diff,
+        })
+    }).then(console.log, console.log)
 }

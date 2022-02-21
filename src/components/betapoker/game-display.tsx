@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 import CardSpread from './card-spread';
 import Card from './card';
 import RoboAvatar from './robo-avatar';

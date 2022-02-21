@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import CenteredContent from './centered-content';
-import { ButtonBase, Typography, Box, Grid } from '@mui/material';
+import { ButtonBase, Typography, Grid } from '@mui/material';
 import ProjectLinks from './project-display-links';
 
 interface ProjectDisplayPageProps {
